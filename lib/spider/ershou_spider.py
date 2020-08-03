@@ -28,6 +28,11 @@ class ErShouSpider(BaseSpider):
         :return: None
         """
         district_name = area_dict.get(area_name, "")
+
+        if not (district_name == 'gaoxin7' and area_name == 'dayuan'):
+            print("不是高新区-大源片区 跳过： area: " + area_name + ", district_name : " + district_name)
+            return
+
         csv_file = self.today_path + "/{0}_{1}.csv".format(district_name, area_name)
         with open(csv_file, "w") as f:
             # 开始获得需要的板块数据
