@@ -34,7 +34,7 @@ class ErShouSpider(BaseSpider):
             return
 
         csv_file = self.today_path + "/{0}_{1}.csv".format(district_name, area_name)
-        with open(csv_file, "w") as f:
+        with open(csv_file, "w", encoding='utf-8') as f:
             # 开始获得需要的板块数据
             ershous = self.get_area_ershou_info(city_name, area_name)
             # 锁定，多线程读写
@@ -96,18 +96,20 @@ class ErShouSpider(BaseSpider):
                 price = house_elem.find('div', class_="totalPrice")
                 name = house_elem.find('div', class_='title')
                 desc = house_elem.find('div', class_="houseInfo")
+                xiaoqu = house_elem.find('div', class_="positionInfo").find('a')
                 pic = house_elem.find('a', class_="img").find('img', class_="lj-lazy")
 
                 # 继续清理数据
                 price = price.text.strip()
                 name = name.text.replace("\n", "")
+                xiaoqu = xiaoqu.text.strip()
                 desc = desc.text.replace("\n", "").strip()
                 pic = pic.get('data-original').strip()
                 # print(pic)
 
 
                 # 作为对象保存
-                ershou = ErShou(chinese_district, chinese_area, name, price, desc, pic)
+                ershou = ErShou(chinese_district, chinese_area, xiaoqu, name, price, desc, pic)
                 ershou_list.append(ershou)
         return ershou_list
 
